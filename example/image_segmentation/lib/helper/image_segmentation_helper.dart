@@ -53,12 +53,12 @@ class ImageSegmentationHelper {
 
   _loadModel() async {
     final options = InterpreterOptions();
-    _interpreter = await Interpreter.fromAsset('assets/deeplabv3.tflite',
+    _interpreter = await Interpreter.fromAsset('assets/deeplabv3_257_mv_gpu.tflite',
         options: options);
   }
 
   _loadLabel() async {
-    final labelString = await rootBundle.loadString('assets/labelmap.txt');
+    final labelString = await rootBundle.loadString('assets/deeplabv3_257_mv_gpu.txt');
     _labels = labelString.split('\n');
   }
 
