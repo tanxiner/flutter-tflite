@@ -23,6 +23,8 @@ import 'package:image_segmentation/helper/image_segmentation_helper.dart';
 import 'package:image/image.dart' as image_lib;
 import 'dart:ui' as ui;
 
+import 'home_screen.dart'; // Import the HomeScreen
+
 late List<CameraDescription> _cameras;
 
 Future<void> main() async {
@@ -35,7 +37,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Image Segmentation Home Page'),
+      home: HomeScreen(), // Start with HomeScreen
     );
   }
 }
@@ -68,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   Future<void> _initCamera() async {
     _cameraDescription = _cameras.firstWhere(
-        (element) => element.lensDirection == CameraLensDirection.back);
+            (element) => element.lensDirection == CameraLensDirection.back);
     _cameraController = CameraController(
         _cameraDescription, ResolutionPreset.medium,
         imageFormatGroup: Platform.isIOS
@@ -91,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     _isProcessing = true;
     // run image segmentation
     final masks =
-        await _imageSegmentationHelper.inferenceCameraFrame(cameraImage);
+    await _imageSegmentationHelper.inferenceCameraFrame(cameraImage);
     _isProcessing = false;
     if (mounted) {
       // convert mask to image, if Platform is Android we need to swap width
@@ -196,9 +197,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           ? _displayImage!.height
           : _displayImage!.width;
       final minScreenSize =
-          MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
-              ? MediaQuery.of(context).size.height
-              : MediaQuery.of(context).size.width;
+      MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
+          ? MediaQuery.of(context).size.height
+          : MediaQuery.of(context).size.width;
       scale = minScreenSize / minOutputSize;
     }
     return Stack(
@@ -212,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             ),
           ),
         if (_labelsIndex != null)
-          // Align bottom
+        // Align bottom
           Align(
             alignment: Alignment.bottomCenter,
             child: ListView.builder(
@@ -225,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   decoration: BoxDecoration(
                     // parse color from label color
                     color: Color(ImageSegmentationHelper
-                            .labelColors[_labelsIndex![index]])
+                        .labelColors[_labelsIndex![index]])
                         .withOpacity(0.5),
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -251,7 +252,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         title: Center(
           child: Image.asset('assets/images/tfl_logo.png'),
         ),
-        backgroundColor: Colors.black.withOpacity(0.5),
+        backgroundColor: Colors.black.withOpacity(1),
       ),
       body: cameraWidget(context),
     );
